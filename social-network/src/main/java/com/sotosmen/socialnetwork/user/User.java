@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
+import com.sotosmen.socialnetwork.messaging.Conversation;
+import com.sotosmen.socialnetwork.messaging.Message;
 import com.sotosmen.socialnetwork.post.Post;
 import com.sotosmen.socialnetwork.thread.Thread;
 import com.sotosmen.socialnetwork.validators.validPassword;
@@ -48,5 +50,12 @@ public class User {
     private List<Thread> threads;
     @OneToMany(mappedBy="creatorUser") @Getter @Setter
     private List<Post> posts;
-    
+    @OneToMany(mappedBy="senderUser") @Getter @Setter
+    private List<Message> messagesSent;
+    @OneToMany(mappedBy="receiverUser") @Getter @Setter
+    private List<Message> messagesReceived;
+    @OneToMany(mappedBy="creatorUser") @Getter @Setter
+    private List<Conversation> conversationsCreated;
+    @OneToMany(mappedBy="receiverUser") @Getter @Setter
+    private List<Conversation> conversationsReceived;
 }

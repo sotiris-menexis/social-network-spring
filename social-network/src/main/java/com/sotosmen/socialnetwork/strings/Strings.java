@@ -7,4 +7,7 @@ public class Strings {
 	public static final String noUsers = "No users were found.";
 	public static final String userEx = "User with this username already exists.";
 	public static final String noUser = "No user with that name was found.";
+	public static final String noMessageUser = "No message found from that user.";
+	public static final String noMessageCon = "No messages found in this conversation.";
+	public static final String noMessages = "No messages found.";
 }
