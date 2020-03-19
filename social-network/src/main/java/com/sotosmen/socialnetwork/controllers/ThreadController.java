@@ -1,4 +1,4 @@
-package com.sotosmen.socialnetwork.thread;
+package com.sotosmen.socialnetwork.controllers;
 
 import java.util.List;
 
@@ -12,33 +12,21 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sotosmen.socialnetwork.thread.Thread;
+import com.sotosmen.socialnetwork.thread.ThreadCompositeKey;
 import com.sotosmen.socialnetwork.exception.ResourceException;
 import com.sotosmen.socialnetwork.repository.ThreadRepository;
 import com.sotosmen.socialnetwork.repository.UserRepository;
 import com.sotosmen.socialnetwork.strings.Strings;
-/*
- * Δημιουργία κλάσης και δήλωση της κλάσης ως RestController η οποία περιέχει τα
- * annotations Controller και ResponseBody. Αυτό δηλώνει ότι οποιοδήποτε RequestMapping
- * της κλάσης θα επιστρέψει HttpResponse.
- */
+
 @RestController
 public class ThreadController {
-	/*
-	 * Το autowired annotation λέει στο dependency injection container της spring να
-	 * δημιουργήσει μία εξάργηση μεταξύ αυτής της κλάσης του UserRepository και
-	 * ThreadRepository.
-	 */
+
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
 	ThreadRepository threadRepository;
-	/*
-	 * Δημιουργία GetMapping στο uri users. Αυτό σημαίνει ότι θα εκτελεστεί η παρακάτω
-	 * μέθοδος μόλις γίνει http get request στο localhost:8080/threads και θα επιστραφεί
-	 * μία λίστα αντικειμένων Thread σε μορφή json. Λόγω του ResponseBody που
-	 * εμπεριέχεται στο RestController μορφή της λίστας θα είναι json. Αν η βάση είναι
-	 * άδεια τότε θα επιστραφεί αντίστοιχο μήνυμα και HttpStatus NOT FOUND.
-	 */
+
 	@GetMapping("/threads")
 	public List<Thread> getThreads() {
 		if (threadRepository.count()==0) {
@@ -47,15 +35,7 @@ public class ThreadController {
 			return threadRepository.findAll();
 		}
 	}
-	/*
-	 * Δημιουργία GetMapping στο uri users. Αυτό σημαίνει ότι θα εκτελεστεί η παρακάτω
-	 * μέθοδος μόλις γίνει http post request στο localhost:8080/threads/{thread_name} και
-	 * επειδή είναι void δεν θα επιστραφεί τίποτα. Η μέθοδος επιστρέφει τον χρήστη με
-	 * το αντιστοιχο thread_name που έχουμε περάσει στο uri (το annotation PathVariable
-	 * δηλώνει ότι η μεταβλητή που ακολουθεί είναι η μεταβλητή που έχουμε περάσει στο
-	 * uri. Αν ο χρήστης δεν υπάρχει τότε επιστρέφουμε αντίστοιχο μήνυμα με 
-	 * HttpStatus NOT FOUND.
-	 */
+
 	@GetMapping("/threads/{thread_name}")
 	public List<Thread> getThreadByName(@PathVariable String threadName) {
 		List<Thread> result = threadRepository.findByIdThreadName(threadName);

@@ -1,6 +1,7 @@
 package com.sotosmen.socialnetwork.strings;
 
 public class Strings {
+	public static final String deletionS = "Deletion was successful.";
 	public static final String nullObj = "The object sent is empty.";
 	public static final String exPost = "Post with this id already exists.";
 	public static final String noPosts = "No posts were found.";
@@ -17,4 +18,9 @@ public class Strings {
 	public static final String noMessages = "No messages were found.";
 	public static final String noConversations = "No conversations were found.";
 	public static final String noConversationsUser = "No conversations were found for this user.";
+	public static final String noConversation = "No conversation for these users was found.";
+	public static final String wrongPassword = "The password given was wrong.";
+	public static final String noUsersSearch = "No users with this username were found.";
+	public static final String noThreadsSearch = "No threads with this name were found.";
+	public static final String noPostsSearch = "No posts with these words were found.";
 }

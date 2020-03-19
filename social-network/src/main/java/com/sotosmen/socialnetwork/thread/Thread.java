@@ -34,6 +34,8 @@ public class Thread {
 	private Date timestamp;
 	@Column(name="votes") @Getter @Setter
 	private long votes;
+	@Column(name="type") @Getter @Setter
+	private String type;
 	@OneToMany(mappedBy="ownerThread")
 	List<Post> posts;
 }

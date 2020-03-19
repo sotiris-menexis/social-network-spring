@@ -28,6 +28,8 @@ public class Post {
 	private long votes;
 	@Column(name="timestamp") @Getter @Setter
 	private Date timestamp;
+	@Column(name="type") @Getter @Setter
+	private String type;
 	@MapsId("threadId")
 	@ManyToOne @Setter
 	@JoinColumns({@JoinColumn(name="thread_owner_name",referencedColumnName="thread_name"),
