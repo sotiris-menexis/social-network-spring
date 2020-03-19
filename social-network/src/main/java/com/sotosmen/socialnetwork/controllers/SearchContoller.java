@@ -65,7 +65,7 @@ public class SearchContoller {
 			throw new ResourceException(HttpStatus.NOT_FOUND,Strings.noUsers);
 		}
 	}
-	@GetMapping("/search/threads/{keyword}/{type}")
+	@GetMapping("/search/posts/{keyword}/{type}")
 	public List<Post> getPosts(@PathVariable(value="keyword") String keyword
 							  ,@PathVariable(value="type") String type){
 		if(postRepository.count()!=0) {

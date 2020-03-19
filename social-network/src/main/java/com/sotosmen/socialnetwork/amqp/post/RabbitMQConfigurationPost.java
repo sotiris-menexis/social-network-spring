@@ -36,19 +36,20 @@ public class RabbitMQConfigurationPost {
 	Queue queueDelete() {
 		return new Queue(postQueueNameDelete,false);
 	}
-	@Bean
+	@Bean(name="directExchangePost")
 	DirectExchange directExchangePost() {
 		return new DirectExchange(postExchange);
 	}
-	@Bean
-	Binding bindingPostPost(@Qualifier("postQueuePost") Queue queue,DirectExchange exchange) {
+	@Bean(name="bindingPostPost")
+	Binding bindingPostPost(@Qualifier("postQueuePost") Queue queue
+						   ,@Qualifier("directExchangePost")DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
+	@Bean(name="bindingPostPost")
 	Binding bindingPostPut(@Qualifier("postQueuePut") Queue queue,DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
+	@Bean(name="bindingPostPost")
 	Binding bindingPostDelete(@Qualifier("postQueueDelete") Queue queue,DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
@@ -56,7 +57,7 @@ public class RabbitMQConfigurationPost {
 	public MessageConverter messageConverterPost() {
 		return new Jackson2JsonMessageConverter();
 	}
-	@Bean
+	@Bean(name="rabbitTemplatePost")
 	public RabbitTemplate rabbitTemplatePost(ConnectionFactory connectionFactory) {
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 		rabbitTemplate.setMessageConverter(messageConverterPost());

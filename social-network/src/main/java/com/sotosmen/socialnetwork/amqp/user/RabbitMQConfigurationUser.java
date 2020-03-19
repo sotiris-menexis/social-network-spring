@@ -24,39 +24,42 @@ public class RabbitMQConfigurationUser {
 	private String userQueueNamePut;
 	@Value("${user.rabbitmq.queuename.delete}")
 	private String userQueueNameDelete;
-	@Bean(name = "userQueuePost")
+	@Bean(name="userQueuePost")
 	Queue queuePost() {
 		return new Queue(userQueueNamePost,false);
 	}
-	@Bean(name = "userQueuePut") 
+	@Bean(name="userQueuePut") 
 	Queue queuePut() {
 		return new Queue(userQueueNamePut,false);
 	}
-	@Bean(name = "userQueueDelete") 
+	@Bean(name="userQueueDelete") 
 	Queue queueDelete() {
 		return new Queue(userQueueNameDelete,false);
 	}
-	@Bean
+	@Bean(name="directExchangeUser")
 	DirectExchange directExchangeUser() {
 		return new DirectExchange(userExchange);
 	}
-	@Bean
-	Binding bindingPostUser(@Qualifier("userQueuePost")Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingPostUser")
+	Binding bindingPostUser(@Qualifier("userQueuePost")Queue queue
+						   ,@Qualifier("directExchangeUser") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
-	Binding bindingPutUser(@Qualifier("userQueuePut")Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingPutUser")
+	Binding bindingPutUser(@Qualifier("userQueuePut")Queue queue
+						  ,@Qualifier("directExchangeUser") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
-	Binding bindingDeleteUser(@Qualifier("userQueueDelete")Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingDeleteUser")
+	Binding bindingDeleteUser(@Qualifier("userQueueDelete")Queue queue
+							 ,@Qualifier("directExchangeUser") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean
 	public MessageConverter messageConverterUser() {
 		return new Jackson2JsonMessageConverter();
 	}
-	@Bean
+	@Bean(name="rabbitTemplateUser")
 	public RabbitTemplate rabbitTemplateUser(ConnectionFactory connectionFactory) {
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 		rabbitTemplate.setMessageConverter(messageConverterUser());

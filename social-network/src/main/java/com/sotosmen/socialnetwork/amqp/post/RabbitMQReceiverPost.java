@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import com.sotosmen.socialnetwork.thread.Thread;
 @Service
 public class RabbitMQReceiverPost {
 	@Autowired
+	@Qualifier("rabbitTemplatePost")
 	RabbitTemplate rabbitTemplate;
 	@Autowired
 	UserRepository userRepository;

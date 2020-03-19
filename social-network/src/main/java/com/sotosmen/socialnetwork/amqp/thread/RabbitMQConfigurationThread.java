@@ -36,27 +36,30 @@ public class RabbitMQConfigurationThread {
 	Queue queueDelete() {
 		return new Queue(threadQueueNameDelete,false);
 	}
-	@Bean
+	@Bean(name="directExchangeThread")
 	DirectExchange directExchangeThread() {
 		return new DirectExchange(threadExchange);
 	}
-	@Bean
-	Binding bindingPostThread(@Qualifier("threadQueuePost") Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingPostThread")
+	Binding bindingPostThread(@Qualifier("threadQueuePost") Queue queue
+							 ,@Qualifier("directExchangeThread") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
-	Binding bindingPutThread(@Qualifier("threadQueuePut") Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingPutThread")
+	Binding bindingPutThread(@Qualifier("threadQueuePut") Queue queue
+							,@Qualifier("directExchangeThread") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean
-	Binding bindingDeleteThread(@Qualifier("threadQueueDelete") Queue queue, DirectExchange exchange) {
+	@Bean(name="bindingDeleteThread")
+	Binding bindingDeleteThread(@Qualifier("threadQueueDelete") Queue queue
+							   ,@Qualifier("directExchangeThread") DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean
 	public MessageConverter messageConverterThread() {
 		return new Jackson2JsonMessageConverter();
 	}
-	@Bean
+	@Bean(name="rabbitTemplateThread")
 	public RabbitTemplate rabbitTemplateThread(ConnectionFactory connectionFactory) {
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
 		rabbitTemplate.setMessageConverter(messageConverterThread());
