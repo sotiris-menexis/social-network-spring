@@ -4,6 +4,7 @@ public class Strings {
 	public static final String deletionS = "Deletion was successful.";
 	public static final String nullObj = "The object sent is empty.";
 	public static final String exPost = "Post with this id already exists.";
+	public static final String noPost = "No post with this id was found.";
 	public static final String noPosts = "No posts were found.";
 	public static final String noPostsThread = "No posts were found in this thread.";
 	public static final String noPostsUser = "No posts were found for this user.";

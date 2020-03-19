@@ -1,4 +1,4 @@
-package com.sotosmen.socialnetwork.amqp.user;
+package com.sotosmen.socialnetwork.amqp.post;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,52 +14,52 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQConfigurationThread {
-	@Value("${thread.rabbitmq.exchange}")
-	private String threadExchange;
-	@Value("${thread.rabbitmq.queuename.post}")
-	private String threadQueueNamePost;
-	@Value("${thread.rabbitmq.queuename.put}")
-	private String threadQueueNamePut;
-	@Value("${thread.rabbitmq.queuename.delete}")
-	private String threadQueueNameDelete;
+public class RabbitMQConfigurationPost {
+	@Value("${post.rabbitmq.exchange}")
+	private String postExchange;
+	@Value("${post.rabbitmq.queuename.post}")
+	private String postQueueNamePost;
+	@Value("${post.rabbitmq.queuename.put}")
+	private String postQueueNamePut;
+	@Value("${post.rabbitmq.queuename.delete}")
+	private String postQueueNameDelete;
 	
-	@Bean(name="threadQueuePost")
+	@Bean(name="postQueuePost")
 	Queue queuePost() {
-		return new Queue(threadQueueNamePost,false);
+		return new Queue(postQueueNamePost,false);
 	}
-	@Bean(name="threadQueuePut")
+	@Bean(name="postQueuePut")
 	Queue queuePut() {
-		return new Queue(threadQueueNamePut,false);
+		return new Queue(postQueueNamePut,false);
 	}
-	@Bean(name="threadQueueDelete")
+	@Bean(name="postQueueDelete")
 	Queue queueDelete() {
-		return new Queue(threadQueueNameDelete,false);
+		return new Queue(postQueueNameDelete,false);
 	}
 	@Bean
-	DirectExchange directExchangeThread() {
-		return new DirectExchange(threadExchange);
+	DirectExchange directExchangePost() {
+		return new DirectExchange(postExchange);
 	}
 	@Bean
-	Binding bindingPostThread(@Qualifier("threadQueuePost") Queue queue, DirectExchange exchange) {
+	Binding bindingPostPost(@Qualifier("postQueuePost") Queue queue,DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean
-	Binding bindingPutThread(@Qualifier("threadQueuePut") Queue queue, DirectExchange exchange) {
+	Binding bindingPostPut(@Qualifier("postQueuePut") Queue queue,DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean
-	Binding bindingDeleteThread(@Qualifier("threadQueueDelete") Queue queue, DirectExchange exchange) {
+	Binding bindingPostDelete(@Qualifier("postQueueDelete") Queue queue,DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean
-	public MessageConverter messageConverterThread() {
+	public MessageConverter messageConverterPost() {
 		return new Jackson2JsonMessageConverter();
 	}
 	@Bean
-	public RabbitTemplate rabbitTemplateThread(ConnectionFactory connectionFactory) {
+	public RabbitTemplate rabbitTemplatePost(ConnectionFactory connectionFactory) {
 		final RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setMessageConverter(messageConverterThread());
+		rabbitTemplate.setMessageConverter(messageConverterPost());
 		return rabbitTemplate;
 	}
 }

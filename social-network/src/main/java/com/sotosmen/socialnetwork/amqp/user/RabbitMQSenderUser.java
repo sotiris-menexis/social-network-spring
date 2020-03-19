@@ -23,14 +23,11 @@ public class RabbitMQSenderUser {
 	
 	public void sendToCreateUser(User user) {
 		rabbitTemplate.convertAndSend(exchange, routingkeyC, user);
-		System.out.println("User sent to post queue.");
 	}
 	public void sendToUpdateUser(User user) {
 		rabbitTemplate.convertAndSend(exchange,routingkeyU,user);
-		System.out.println("User sent to put queue.");
 	}
 	public void sendToDeleteUser(String username) {
 		rabbitTemplate.convertAndSend(exchange,routingkeyD,username);
-		System.out.println("User sent to delete queue.");
 	}
 }

@@ -12,4 +12,6 @@ public interface PostRepository extends JpaRepository<Post,PostCompositeKey> {
 	List<Post> findByIdUserIdP(String username);
 	List<Post> findByIdThreadId(ThreadCompositeKey id);
 	List<Post> findByType(String type);
+	void deleteByIdUserIdP(String username);
+	void deleteByIdThreadId(ThreadCompositeKey threadId);
 }

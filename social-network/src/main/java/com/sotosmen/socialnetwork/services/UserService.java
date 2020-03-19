@@ -30,23 +30,13 @@ public class UserService {
 	}
 	
 	public User createUser(User user) {
-		if (userExists(user.getUsername())) {
-			throw new ResourceException(HttpStatus.FORBIDDEN, Strings.userEx);
-		}
 		rabbitMQSender.sendToCreateUser(user);
-		rabbitMQReceiver.receiveToCreateUser();
-		userRepository.save(user);
-		return user;
+		return rabbitMQReceiver.receiveToCreateUser();
 	}
 	
 	public User updateUser(User user) {
-		if (userExists(user.getUsername())) {
-			rabbitMQSender.sendToUpdateUser(user);
-			rabbitMQReceiver.receiveToUpdateUser();
-		} else {
-			throw new ResourceException(HttpStatus.NOT_FOUND, Strings.noUser);
-		}
-		return user;
+		rabbitMQSender.sendToUpdateUser(user);
+		return rabbitMQReceiver.receiveToUpdateUser();;
 	}
 	public String deleteAllUsers() {
 		if (userRepository.count() == 0) {
@@ -65,15 +55,9 @@ public class UserService {
 	}
 	
 	public String deleteUser(String username) {
-		if (userExists(username)) {
-			rabbitMQSender.sendToDeleteUser(username);
-			rabbitMQReceiver.receiveToDeleteUser();
-			return Strings.deletionS;
-		} else {
-			throw new ResourceException(HttpStatus.NOT_FOUND, Strings.noUser);
-		}
+		rabbitMQSender.sendToDeleteUser(username);
+		return rabbitMQReceiver.receiveToDeleteUser();
 	}
-	
 	public boolean userExists(String username) {
 		if (userRepository.findById(username).isPresent()) {
 			return true;
@@ -81,5 +65,4 @@ public class UserService {
 			return false;
 		}
 	}
-
 }
