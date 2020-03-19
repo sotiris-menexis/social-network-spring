@@ -27,11 +27,11 @@ public class ThreadService {
 	
 	public Thread createThread(Thread thread) {
 		rabbitMQSender.sendToCreateThread(thread);
-		return rabbitMQReceiver.createThread();
+		return rabbitMQReceiver.receiveToCreateThread();
 	}
 	public Thread updateThread(Thread thread) {
 		rabbitMQSender.sendToCreateThread(thread);
-		return rabbitMQReceiver.updateThread();
+		return rabbitMQReceiver.receiveToUpdateThread();
 	}
 	public List<Thread> getThreadByName(String threadName) {
 		List<Thread> result = threadRepository.findByIdThreadName(threadName);
@@ -67,11 +67,11 @@ public class ThreadService {
 	
 	public String deleteAllThreadsOfUser(String username) {
 		rabbitMQSender.sendToDeleteThread(username);
-		return rabbitMQReceiver.deleteAllThreadsOfUser();
+		return rabbitMQReceiver.receiveToDeleteAllThreadsOfUser();
 	}
 	public String deleteThreadOfUser(String username, String threadName) {
 		rabbitMQSender.sendToDeleteThread(username+"/$#@"+threadName);
-		return rabbitMQReceiver.deleteThreadOfUser();
+		return rabbitMQReceiver.receiveToDeleteThreadOfUser();
 		
 	}
 	

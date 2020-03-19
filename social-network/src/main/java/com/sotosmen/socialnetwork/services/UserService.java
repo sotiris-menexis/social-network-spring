@@ -36,7 +36,7 @@ public class UserService {
 	
 	public User updateUser(User user) {
 		rabbitMQSender.sendToUpdateUser(user);
-		return rabbitMQReceiver.receiveToUpdateUser();;
+		return rabbitMQReceiver.receiveToUpdateUser();
 	}
 	public String deleteAllUsers() {
 		if (userRepository.count() == 0) {
