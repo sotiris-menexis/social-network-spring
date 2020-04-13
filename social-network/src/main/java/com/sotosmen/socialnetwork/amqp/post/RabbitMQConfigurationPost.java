@@ -45,12 +45,14 @@ public class RabbitMQConfigurationPost {
 						   ,@Qualifier("directExchangePost")DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean(name="bindingPostPost")
-	Binding bindingPostPut(@Qualifier("postQueuePut") Queue queue,DirectExchange exchange) {
+	@Bean(name="bindingPutPost")
+	Binding bindingPostPut(@Qualifier("postQueuePut") Queue queue
+						  ,@Qualifier("directExchangePost")DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
-	@Bean(name="bindingPostPost")
-	Binding bindingPostDelete(@Qualifier("postQueueDelete") Queue queue,DirectExchange exchange) {
+	@Bean(name="bindingDeletePost")
+	Binding bindingPostDelete(@Qualifier("postQueueDelete") Queue queue
+							 ,@Qualifier("directExchangePost")DirectExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(queue.getName());
 	}
 	@Bean

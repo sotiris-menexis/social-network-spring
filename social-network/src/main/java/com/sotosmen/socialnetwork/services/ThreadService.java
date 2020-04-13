@@ -30,11 +30,11 @@ public class ThreadService {
 		return rabbitMQReceiver.receiveToCreateThread();
 	}
 	public Thread updateThread(Thread thread) {
-		rabbitMQSender.sendToCreateThread(thread);
+		rabbitMQSender.sendToUpdateThread(thread);
 		return rabbitMQReceiver.receiveToUpdateThread();
 	}
-	public List<Thread> getThreadByName(String threadName) {
-		List<Thread> result = threadRepository.findByIdThreadName(threadName);
+	public Thread getThreadByName(String threadName) {
+		Thread result = threadRepository.findById(threadName).get();
 		if (result != null) {
 			return result;
 		} else {
@@ -42,7 +42,7 @@ public class ThreadService {
 		}
 	}
 	public List<Thread> getThreadByUsername(String username) {
-		List<Thread> result = threadRepository.findByIdUserId(username);
+		List<Thread> result = threadRepository.findByCreatorUser(username);
 		if (result != null) {
 			return result;
 		} else {
@@ -69,9 +69,9 @@ public class ThreadService {
 		rabbitMQSender.sendToDeleteThread(username);
 		return rabbitMQReceiver.receiveToDeleteAllThreadsOfUser();
 	}
-	public String deleteThreadOfUser(String username, String threadName) {
-		rabbitMQSender.sendToDeleteThread(username+"/$#@"+threadName);
-		return rabbitMQReceiver.receiveToDeleteThreadOfUser();
+	public String deleteThread(String threadName) {
+		rabbitMQSender.sendToDeleteThread(threadName);
+		return rabbitMQReceiver.receiveToDeleteThread();
 		
 	}
 	

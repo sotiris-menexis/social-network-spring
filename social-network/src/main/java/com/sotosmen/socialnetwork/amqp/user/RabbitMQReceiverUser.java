@@ -43,7 +43,7 @@ public class RabbitMQReceiverUser {
 		User user = (User)rabbitTemplate.receiveAndConvert(queuePut);
 		if(userRepository.count()!=0) {
 			if (userExists(user.getUsername())) {
-				userRepository.deleteById(user.getUsername());
+				//userRepository.deleteById(user.getUsername());
 				userRepository.save(user);
 				return user;
 			} else {

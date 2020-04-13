@@ -2,6 +2,8 @@ package com.sotosmen.socialnetwork.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +27,10 @@ public class UserController {
 	}
 
 	@PostMapping("/users")
-	public User createUser(@RequestBody User user) {
+	public User createUser(@Valid @RequestBody User user) {
 		return userService.createUser(user);
 	}
+	
 	@PutMapping("/users")
 	public User updateUser(@RequestBody User user) {
 		return userService.updateUser(user);

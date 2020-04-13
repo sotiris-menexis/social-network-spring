@@ -1,7 +1,5 @@
 package com.sotosmen.socialnetwork.amqp.post;
 
-import java.util.List;
-
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,7 +13,6 @@ import com.sotosmen.socialnetwork.repository.PostRepository;
 import com.sotosmen.socialnetwork.repository.ThreadRepository;
 import com.sotosmen.socialnetwork.repository.UserRepository;
 import com.sotosmen.socialnetwork.strings.Strings;
-import com.sotosmen.socialnetwork.thread.Thread;
 
 @Service
 public class RabbitMQReceiverPost {
@@ -35,47 +32,32 @@ public class RabbitMQReceiverPost {
 	@Value("${post.rabbitmq.queuename.delete}")
 	String queueDelete;
 	
-	public Post receiveToCreatePost() {
+	public Post receiveToCreatePost(String username,String threadName) {
 		Post post = (Post)rabbitTemplate.receiveAndConvert(queuePost);
-		if(post != null) {
-			if(postRepository.findById(post.getId()).isPresent()) {
-				throw new ResourceException(HttpStatus.FORBIDDEN, Strings.exPost);
-			}else {
-				postRepository.save(post);
-				return post;
-			}
+		if(post.getId() == null) {
+			post.setCreatorUser(username);
+			post.setOwnerThread(threadName);
+			postRepository.save(post);
+			return post;
 		}else {
 			throw new ResourceException(HttpStatus.NO_CONTENT, Strings.nullObj);
 		}
 	}
 	public Post receiveToUpdatePost() {
 		Post post = (Post)rabbitTemplate.receiveAndConvert(queuePut);
-		if(post != null) {
-			if(postRepository.findById(post.getId()).isPresent()) {
-				postRepository.deleteById(post.getId());
-				postRepository.save(post);
-				return post;
-			}else {
-				throw new ResourceException(HttpStatus.NOT_FOUND, Strings.noPost);
-			}
+		if(postRepository.findById(post.getId()).isPresent()) {
+			postRepository.save(post);
+			return post;
 		}else {
 			throw new ResourceException(HttpStatus.NO_CONTENT, Strings.nullObj);
 		}
 	}
 	public String receiveToDeletePostsOfUser() {
-		String username;
-		while(true) {
-			username = (String)rabbitTemplate.receiveAndConvert(queueDelete);
-			if(username.contains("/#@/")) {
-				break;
-			}
-		}
-		String[] result = username.split("/#@/");
-		username = result[0];
+		String username = (String)rabbitTemplate.receiveAndConvert(queueDelete);
 		if(userRepository.count()!=0) {
 			if(userRepository.findById(username).isPresent()) {
 				if(postRepository.count()!=0) {
-					postRepository.deleteByIdUserIdP(username);
+					postRepository.deleteByCreatorUser(username);
 					return Strings.deletionS;
 				}else {
 					throw new ResourceException(HttpStatus.NOT_FOUND,Strings.noPosts);
@@ -89,25 +71,27 @@ public class RabbitMQReceiverPost {
 	}
 	
 	public String receiveToDeletePostsOfThread() {
-		String threadName;
-		while(true) {
-			threadName = (String)rabbitTemplate.receiveAndConvert(queueDelete);
-			if(threadName.contains("/@#/")) {
-				break;
-			}
-		}
-		String[] result = threadName.split("/@#/");
-		threadName = result[0];
+		Post post = (Post)rabbitTemplate.receiveAndConvert(queueDelete);
+		String threadName = post.getOwnerThread();
 		if(threadRepository.count()!=0) {
-			List<Thread> threads = threadRepository.findByIdThreadName(threadName);
 			if(postRepository.count()!=0) {
-				postRepository.deleteByIdThreadId(threads.get(0).getId());
+				postRepository.deleteByOwnerThread(threadName);
 				return Strings.deletionS;
 			}else {
 				throw new ResourceException(HttpStatus.NOT_FOUND,Strings.noPosts);
 			}
 		}else {
 			throw new ResourceException(HttpStatus.NOT_FOUND,Strings.noThreads);
+		}
+	}
+	
+	public String receiveToDeletePost() {
+		String post = (String)rabbitTemplate.receiveAndConvert(queueDelete);
+		if(postRepository.count()!=0) {
+			postRepository.deleteById(Long.valueOf(post));
+			return Strings.deletionS;
+		}else {
+			throw new ResourceException(HttpStatus.NOT_FOUND,Strings.noPosts);
 		}
 	}
 	

@@ -4,33 +4,30 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.sotosmen.socialnetwork.user.User;
-
+import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name="messages")
+@Getter @Setter
 public class Message {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="message_id")
 	private Long id;
-	@ManyToOne(fetch=FetchType.LAZY) @Setter
-	@JoinColumn(name="sender_user",insertable=false,updatable=false)
-	private User senderUser;
-	@ManyToOne(fetch=FetchType.LAZY) @Setter
-	@JoinColumn(name="receiver_user",insertable=false,updatable=false)
-	private User receiverUser;
-	@ManyToOne(fetch=FetchType.LAZY) @Setter
-	private Conversation ownerConversation;
+	@Column(name="sender_user_id")
+	private String senderUser;
+	@Column(name="receiver_user_id")
+	private String receiverUser;
+	@Column(name="owner_conversation_id")
+	private Long ownerConversation;
 	@Column(name="timestamp")
 	private Date timestamp;
-
+	@Column(name="text")
+	private String text;
 }

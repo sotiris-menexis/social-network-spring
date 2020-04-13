@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sotosmen.socialnetwork.services.ThreadService;
@@ -20,17 +21,17 @@ public class ThreadController {
 	ThreadService threadService;
 	
 	@GetMapping("/threads")
-	public List<Thread> getThreads() {
+	public @ResponseBody List<Thread> getThreads() {
 		return threadService.getThreads();
 	}
 
 	@GetMapping("/threads/{thread_name}")
-	public List<Thread> getThreadByName(@PathVariable String threadName) {
+	public Thread getThreadByName(@PathVariable(value="thread_name") String threadName) {
 		return threadService.getThreadByName(threadName);
 	}
 	
 	@GetMapping("/threads/users/{username}")
-	public List<Thread> getThreadByUsername(@PathVariable String username) {
+	public List<Thread> getThreadByUsername(@PathVariable(value="username") String username) {
 		return threadService.getThreadByUsername(username);
 	}
 
@@ -54,9 +55,8 @@ public class ThreadController {
 		return threadService.deleteAllThreadsOfUser(username);
 	}
 	
-	@DeleteMapping("/threads/{thread_name}/users/{username}")
-	public String deleteThreadOfUser(@PathVariable(value="thread_name") String threadName,
-								   @PathVariable(value="username") String username) {
-		return threadService.deleteThreadOfUser(username, threadName);
+	@DeleteMapping("/threads/{thread_name}")
+	public String deleteThread(@PathVariable(value="thread_name") String threadName) {
+		return threadService.deleteThread(threadName);
 	}
 }

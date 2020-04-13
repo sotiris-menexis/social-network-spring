@@ -1,41 +1,30 @@
 package com.sotosmen.socialnetwork.thread;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.OneToMany;
+import javax.persistence.Id;
 import javax.persistence.Table;
-
-import com.sotosmen.socialnetwork.post.Post;
-import com.sotosmen.socialnetwork.user.User;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Table(name="threads")
+@Setter
 public class Thread {
-	@EmbeddedId @Getter @Setter
-	private ThreadCompositeKey id;
-	@MapsId("userId") @Setter
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="user_id",insertable=false,updatable=false)
-	private User creatorUser;
-	@Column(name="description") @Getter @Setter
+	@Id @Getter
+	@Column(name="thread_name")
+	private String threadName;
+	@Column(name="user_id") @Getter
+	private String creatorUser;
+	@Column(name="description") @Getter
 	private String description;
-	@Column(name="timestamp") @Getter @Setter
+	@Column(name="timestamp") @Getter
 	private Date timestamp;
-	@Column(name="votes") @Getter @Setter
+	@Column(name="votes") @Getter
 	private long votes;
-	@Column(name="type") @Getter @Setter
+	@Column(name="type") @Getter
 	private String type;
-	@OneToMany(mappedBy="ownerThread")
-	List<Post> posts;
 }

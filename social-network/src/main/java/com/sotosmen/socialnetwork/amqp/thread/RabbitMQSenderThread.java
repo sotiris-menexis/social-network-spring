@@ -29,8 +29,8 @@ public class RabbitMQSenderThread {
 	public void sendToUpdateThread(Thread thread) {
 		rabbitTemplate.convertAndSend(exchange,routingkeyU,thread);
 	}
-	public void sendToDeleteThread(String username) {
-		rabbitTemplate.convertAndSend(exchange,routingkeyD,username);
+	public void sendToDeleteThread(String string) {
+		rabbitTemplate.convertAndSend(exchange,routingkeyD,string);
 	}
 	
 }

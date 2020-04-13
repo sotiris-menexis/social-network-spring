@@ -29,7 +29,7 @@ public class RabbitMQSenderPost {
 	public void sendToUpdatePost(Post post) {
 		rabbitTemplate.convertAndSend(exchange,routingkeyU,post);
 	}
-	public void sendToDeletePost(String string) {
-		rabbitTemplate.convertAndSend(exchange,routingkeyD,string);
+	public void sendToDeletePost(String post) {
+		rabbitTemplate.convertAndSend(exchange,routingkeyD,post);
 	}
 }

@@ -25,18 +25,19 @@ public class PostController {
 	}
 	
 	@GetMapping("/threads/{thread_name}/posts")
-	public List<Post> getAllPostsOfThread(@PathVariable String threadName){
+	public List<Post> getAllPostsOfThread(@PathVariable(value="thread_name") String threadName){
 		return postService.getAllPostsOfThread(threadName);
 	}
 	
 	@GetMapping("/users/{username}/posts")
-	public List<Post> getAllPostsOfUser(@PathVariable String username){
+	public List<Post> getAllPostsOfUser(@PathVariable(value="username") String username){
 		return postService.getAllPostsOfUser(username);
 	}
 	
-	@PostMapping("/posts")
-	public Post createPost(@RequestBody Post post) {
-		return postService.createPost(post);
+	@PostMapping("/posts/users/{username}/threads/{thread_name}")
+	public Post createPost(@PathVariable(value="username") String username,
+			@PathVariable(value="thread_name") String threadName, @RequestBody Post post) {
+		return postService.createPost(username, threadName, post);
 	}
 	@PutMapping("/posts")
 	public Post updatePost(@RequestBody Post post) {
@@ -46,13 +47,17 @@ public class PostController {
 	public String deleteAllPostsOfUser(@PathVariable String username) {
 		return postService.deleteAllPostsOfUser(username);
 	}
-	@DeleteMapping("/posts/threads/{thread_name}")
+	@DeleteMapping("/posts/threads/{threadName}")
 	public String deleteAllPostsOfThread(@PathVariable String threadName) {
 		return postService.deleteAllPostsOfThread(threadName);
 	}
 	@DeleteMapping("/posts")
 	public String deleteAllPosts() {
 		return postService.deleteAllPosts();
+	}
+	@DeleteMapping("/post/{postId}")
+	public String deletePost(@PathVariable String postId) {
+		return postService.deletePost(postId);
 	}
 	
 }
